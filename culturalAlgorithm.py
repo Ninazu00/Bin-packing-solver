@@ -50,7 +50,7 @@ p2.items = {"C": 15, "D": 5}
 
 def crossOver(parent1, parent2, childPopulation):
    
-    child = Individual(parent1.binSize)
+    child = Individual()
     used_ids = set()
     parent_order = [parent1.items, parent2.items]
     turn = 0
@@ -61,7 +61,7 @@ def crossOver(parent1, parent2, childPopulation):
             if item_id in used_ids:
                 continue
             current_child_size = sum(child.items.values())
-            if current_child_size + item_size <= child.binSize:
+            if current_child_size + item_size <= binSize:
                 child.items[item_id] = item_size
                 used_ids.add(item_id)
                 added = True
