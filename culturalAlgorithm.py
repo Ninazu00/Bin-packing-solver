@@ -94,7 +94,6 @@ def crossOver(parent1, parent2, childPopulation,mutationRate):
 
     return child1, child2
 
-
 def evaluateFitness(individual):
     fill = sum(individual.items.values())
     individual.fitness = fill / binSize
