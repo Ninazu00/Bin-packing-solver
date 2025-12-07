@@ -12,19 +12,7 @@ class Individual:
             self.items[itemID] = itemSize
             return True
         return False
-#Important variable definitions
-binSize = 10
-populationSize = 50
-mutationRate = 0.1
-totalItems = {}
-selectedIndividuals = []
-beliefs = {"min-bin-fill":1,"top-5-items":[]}
-childPopulation = []
-p1 = Individual()
-p2 = Individual()
-p1.items = {"A": 3, "B": 4}
-p2.items = {"C": 5, "D": 2}
-
+    
 def updateBeliefs(selectedIndividuals,beliefs):
     #Keeps count of how many each item appeared in a solution based on its key
     itemsAppearances = {}
@@ -82,7 +70,6 @@ def crossOver(parent1, parent2, childPopulation):
         if not added:
             break
         turn = 1 - turn
-    childPopulation.append(child)
     return child
 
 
@@ -92,7 +79,7 @@ def evaluateFitness(individual):
     return individual.fitness
 
 
-def mutate(individual):
+def mutate(individual,mutationRate):
     if not individual.items:
         return individual
 
@@ -146,3 +133,34 @@ def terminateCondition(generation, maxGenerations,population):
             evaluateFitness(ind)
     bestFitness = max(ind.fitness for ind in population)
     return bestFitness >= 0.90 or generation >= maxGenerations
+
+#Important variable definitions
+binSize = 10
+populationSize = 50
+mutationRate = 0.1
+totalItems = {}
+selectedIndividuals = []
+beliefs = {"min-bin-fill":1,"top-5-items":[]}
+childPopulation = []
+maxGenerations = 100
+p1 = Individual()
+p2 = Individual()
+p1.items = {"A": 3, "B": 4}
+p2.items = {"C": 5, "D": 2}
+
+def generateBinCulturalAlgorithm(maxGenerations, populationSize, mutationRate, totalItems, binSize):
+    generation = 0
+    population = initializePopulation()
+    while not terminateCondition(generation, maxGenerations, population):
+        selectedIndividuals = selectAccepted(population)
+        updateBeliefs(selectedIndividuals, beliefs)
+        newPopulation = applyBeliefs(beliefs, totalItems)
+        childPopulation = []
+        while len(childPopulation) < populationSize // 2:
+            parent1, parent2 = random.sample(selectedIndividuals, 2)
+            child = crossOver(parent1, parent2, childPopulation)
+            child = mutate(child,mutationRate)
+        population = generateNewGeneration(childPopulation, newPopulation)
+        generation += 1
+    bestIndividual = max(population, key=lambda x: x.fitness)
+    return bestIndividual
