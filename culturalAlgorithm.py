@@ -12,14 +12,19 @@ class Individual:
             self.items[itemID] = itemSize
             return True
         return False
-
+#Important variable definitions
 binSize = 10
 populationSize = 50
 mutationRate = 0.1
-
 totalItems = {}
 selectedIndividuals = []
 beliefs = {"min-bin-fill":1,"top-5-items":[]}
+childPopulation = []
+p1 = Individual()
+p2 = Individual()
+p1.items = {"A": 3, "B": 4}
+p2.items = {"C": 5, "D": 2}
+
 def updateBeliefs(selectedIndividuals,beliefs):
     #Keeps count of how many each item appeared in a solution based on its key
     itemsAppearances = {}
@@ -55,11 +60,6 @@ def applyBeliefs(beliefs,totalItems):
                 break
         newIndividuals.append(individual)
     return newIndividuals
-childPopulation = []
-p1 = Individual()
-p2 = Individual()
-p1.items = {"A": 3, "B": 4}
-p2.items = {"C": 5, "D": 2}
 
 def crossOver(parent1, parent2, childPopulation):
    
