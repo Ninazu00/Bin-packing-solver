@@ -1,12 +1,12 @@
-
 class Individual:
-    def __init__(self,binSize):
+    def __init__(self):
         self.fitness = -1
         self.items = {}
-        self.binSize = binSize
-    def getFillRate(self):
+    def getFillRate(self,binSize):
         fillAmount = sum(self.items.values())
-        return fillAmount/self.binSize
+        return fillAmount/binSize
+
+binSize = 10
 
 totalItems = {}
 selectedIndividuals = []
@@ -20,7 +20,8 @@ def updateBeliefs(selectedIndividuals,beliefs):
             if key in ind.items:
                 itemsAppearances[key]+=1
     beliefs["top-5-items"] = sorted(itemsAppearances,key = itemsAppearances.get, reverse = True)[:5]
-    minFill = min(value.getFillRate() for value in selectedIndividuals)
+    minFill = min(value.getFillRate(binSize) for value in selectedIndividuals)
+    beliefs["min-bin-fill"] = minFill
 
 
 childPopulation = []
