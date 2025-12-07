@@ -13,7 +13,7 @@ class Individual:
             return True
         return False
     
-def updateBeliefs(selectedIndividuals,beliefs):
+def updateBeliefs(selectedIndividuals,beliefs,totalItems,binSize):
     #Keeps count of how many each item appeared in a solution based on its key
     itemsAppearances = {}
     itemsAppearances = dict.fromkeys(totalItems.keys(),0)
@@ -35,7 +35,7 @@ def weightedPick(choices, top5):
     return random.choices(choices, weights = weights, k = 1)[0]
 
 
-def applyBeliefs(beliefs,totalItems):
+def applyBeliefs(beliefs,totalItems,binSize,populationSize):
     newIndividuals = []
     for i in range(1,populationSize//2):
         availableItems = list(totalItems.keys())
@@ -60,7 +60,7 @@ def mutate(individual,mutationRate):
     individual.fitness = -1
     return individual
 
-def crossOver(parent1, parent2, childPopulation,mutationRate):
+def crossOver(parent1, parent2, childPopulation,mutationRate,binSize):
    
     def createChild(firstParent, secondParent):
         child = Individual()
@@ -94,15 +94,15 @@ def crossOver(parent1, parent2, childPopulation,mutationRate):
 
     return child1, child2
 
-def evaluateFitness(individual):
+def evaluateFitness(individual,binSize):
     fill = sum(individual.items.values())
     individual.fitness = fill / binSize
     return individual.fitness
 
-def selectAccepted(population):
+def selectAccepted(population,binSize):
     for ind in population:
         if ind.fitness == -1:
-            evaluateFitness(ind)
+            evaluateFitness(ind,binSize)
 
     sortedPop = sorted(population, key=lambda x: x.fitness, reverse=True)
 
@@ -110,7 +110,7 @@ def selectAccepted(population):
     selected = sortedPop[:half]
     return selected
 
-def initializePopulation():
+def initializePopulation(populationSize,totalItems,binSize):
     population = []
     for _ in range(populationSize):
         individual = Individual()
@@ -121,7 +121,7 @@ def initializePopulation():
         population.append(individual)
     return population
 
-def generateNewGeneration(childPopulation, newPopulation):
+def generateNewGeneration(childPopulation, newPopulation,populationSize,binSize,totalItems):
     nextGen = []
     nextGen.extend(childPopulation)
     nextGen.extend(newPopulation)
@@ -136,10 +136,10 @@ def generateNewGeneration(childPopulation, newPopulation):
         nextGen = nextGen[:populationSize]
     return nextGen
 
-def terminateCondition(generation, maxGenerations,population):
+def terminateCondition(generation, maxGenerations,population,binSize):
     for ind in population:
         if ind.fitness == -1:
-            evaluateFitness(ind)
+            evaluateFitness(ind,binSize)
     bestFitness = max(ind.fitness for ind in population)
     return bestFitness >= 0.90 or generation >= maxGenerations
 
@@ -153,40 +153,18 @@ def initializeTotalItems(minSize,maxSize,numItems):
 
 def generateBinCulturalAlgorithm(maxGenerations, populationSize, mutationRate, totalItems, binSize):
     generation = 0
-    population = initializePopulation()
+    population = initializePopulation(populationSize,totalItems,binSize)
     beliefs = {"min-bin-fill":1,"top-5-items":[]}
-    while not terminateCondition(generation, maxGenerations, population):
-        selectedIndividuals = selectAccepted(population)
-        updateBeliefs(selectedIndividuals, beliefs)
-        newPopulation = applyBeliefs(beliefs, totalItems)
+    while not terminateCondition(generation, maxGenerations, population,binSize):
+        selectedIndividuals = selectAccepted(population,binSize)
+        updateBeliefs(selectedIndividuals, beliefs,totalItems, binSize)
+        newPopulation = applyBeliefs(beliefs,totalItems,binSize,populationSize)
         childPopulation = []
         while len(childPopulation) < populationSize // 2:
             parent1, parent2 = random.sample(selectedIndividuals, 2)
-            crossOver(parent1, parent2, childPopulation,mutationRate)
-        population = generateNewGeneration(childPopulation, newPopulation)
+            crossOver(parent1, parent2, childPopulation,mutationRate,binSize)
+        population = generateNewGeneration(childPopulation, newPopulation,populationSize,binSize,totalItems)
         generation += 1
     bestIndividual = max(population, key=lambda x: x.fitness)
     return bestIndividual
 
-#Important variable definitions
-binSize = 10
-populationSize = 50
-mutationRate = 0.1
-totalItems = {}
-maxGenerations = 100
-
-totalItems = initializeTotalItems(3,7,2000)
-bestBin = generateBinCulturalAlgorithm(maxGenerations, populationSize, mutationRate, totalItems, binSize)
-print("Items in best bin:", bestBin.items)
-print("Best bin fill rate:", bestBin.getFillRate(binSize))
-binAmount = 0
-while totalItems:
-    for itemID in bestBin.items.keys():
-        totalItems.pop(itemID, None)
-    if not totalItems:
-        break
-    bestBin = generateBinCulturalAlgorithm(maxGenerations, populationSize, mutationRate, totalItems, binSize)
-    binAmount += 1
-    print("Items in best bin:", bestBin.items)
-    print("Best bin fill rate:", bestBin.getFillRate(binSize))
-print("Total number of bins used: ", binAmount)
