@@ -141,7 +141,7 @@ def terminateCondition(generation, maxGenerations,population,binSize):
         if ind.fitness == -1:
             evaluateFitness(ind,binSize)
     bestFitness = max(ind.fitness for ind in population)
-    return bestFitness >= 0.90 or generation >= maxGenerations
+    return bestFitness >= 0.95 or generation >= maxGenerations
 
 def initializeTotalItems(minSize,maxSize,numItems):
     items = {}

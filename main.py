@@ -1,18 +1,17 @@
 import culturalAlgorithm
 
 #Backtracking testing
-#Important variable definitions
-binSize = 10
+#Fine tuning variables for the cultural algorithm
 populationSize = 50
 mutationRate = 0.1
-totalItems = {}
 maxGenerations = 100
-
+#Generates the list of items based on parameters given by the user
 totalItems = culturalAlgorithm.initializeTotalItems(3,7,20)
-bestBin = culturalAlgorithm.generateBinCulturalAlgorithm(maxGenerations, populationSize, mutationRate, totalItems, binSize)
-print("Items in best bin:", bestBin.items)
-print("Best bin fill rate:", bestBin.getFillRate(binSize))
+#User inputted value for the bin size
+binSize = 10
 binAmount = 0
+bestBin = culturalAlgorithm.Individual()
+#Executes the cultural algorithm repetitively until all items are packed into bins.
 while totalItems:
     for itemID in bestBin.items.keys():
         totalItems.pop(itemID, None)
