@@ -1,3 +1,6 @@
+import math
+import copy
+
 def sortItems(itemsList):
     return sorted(itemsList, reverse=True)
 
@@ -11,20 +14,36 @@ def removeItem(item, binIndex, usedBins, binRemainingCapacities):
 
 def calculateLowerBound(remainingItems, binCapacity):
 
-    pass
+    totalSize = sum(remainingItems)
+    return math.ceil(totalSize / binCapacity)
+
 
 
 def copyBins(bins):
-
-    pass
+    return copy.deepcopy(bins)
+  
 
 
 def pruneBranch(usedBins, bestSolution, remainingItems, binCapacity):
+    lowerBound = calculateLowerBound(remainingItems, binCapacity)
+    if len(usedBins) + lowerBound >= len(bestSolution):
+        return True
 
-    pass
+    return False
 
 
 def initializeSolution(items, binCapacity):
+    bins = []
+    for item in items:
+        placed = False
+        for b in bins:
+            if sum(b) + item <= binCapacity:
+                b.append(item)
+                placed = True
+                break
+        if not placed:
+            bins.append([item])
+    return bins
 
     pass
 
@@ -67,5 +86,18 @@ def backtrack(currentIndex, usedBins, binRemainingCapacities, binCapacity, bestS
 
 
 def solveBinPacking(items, binCapacity):
+    if binCapacity <= 0:
+        raise ValueError("binCapacity must be positive.")
+    if any(item <= 0 for item in items):
+        raise ValueError("All items must have positive size.")
+    if any(item > binCapacity for item in items):
+        raise ValueError("Item size cannot exceed binCapacity.")
+    
+    sortedItems = sortItems(items)
+    bestSolution = initializeSolution(sortedItems, binCapacity)
+    usedBins = []
+    binRemainingCapacities = []
+    backtrack(0, usedBins, binRemainingCapacities,
+              binCapacity, bestSolution, sortedItems)
 
-    pass
+    return bestSolution
