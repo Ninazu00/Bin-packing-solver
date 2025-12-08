@@ -178,7 +178,7 @@ def culturalAlgorithmFullSolve(populationSize,mutationRate,maxGenerations,totalI
             break
         bestBin = generateBinCulturalAlgorithm(maxGenerations, populationSize, mutationRate, totalItems, binSize) #Draws the bin in the gui
         binAmount += 1
-        GUI.drawBinFillLeft(bestBin.getFillRate(binSize),binAmount)
+        GUI.drawBinFillRight(bestBin.getFillRate(binSize),binAmount)
         print("Items in bin:", bestBin.items.values())
         print("Fill rate:", bestBin.getFillRate(binSize))
         print("Total number of bins used: ", binAmount)

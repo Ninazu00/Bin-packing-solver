@@ -6,10 +6,19 @@ class GUI:
         self.root = tk.Tk()
         self.root.title("1D Bin Packing Solver")
         self.root.geometry("1920x1080")
+        #Graph frame
         self.binGraphFrame = tk.Frame(self.root)
         self.binGraphFrame.pack(expand=True)
-        self.binGraphLeft = tk.Text(self.binGraphFrame, font=("Courier", 16),width=45)
+        #Left graph for backtracking
+        self.leftFrame = tk.Frame(self.binGraphFrame)
+        self.leftFrame.pack(side="left", padx=20)
+        self.binGraphLeft = tk.Text(self.leftFrame, font=("Courier", 16),width=45)
         self.binGraphLeft.pack(side="left",padx=20, pady=20)
+        self.leftLabel = tk.Label(self.leftFrame, text="Algorithm 1", font=("Courier", 16))
+        #Right graph for cultural algorithm
+        self.rightFrame = tk.Frame(self.binGraphFrame)
+        self.rightFrame.pack(side="left", padx=20)
+        self.rightLabel = tk.Label(self.rightFrame, text="Algorithm 2", font=("Arial", 16))
         self.binGraphRight = tk.Text(self.binGraphFrame, font=("Courier", 16),width=45)
         self.binGraphRight.pack(side="left",padx=20, pady=20)
     def drawBinFillLeft(self,fillRate, binNumber):
@@ -31,10 +40,10 @@ class GUI:
         bar = f"Bin {binNumber} : "
         bar += "|" + ("█"*filled) + ("-"*empty) + "| " + str(fillRate*100) + "%"
         newText = "\n" + bar
-        self.binGraphLeft.config(state="normal")
-        self.binGraphLeft.insert("end", newText + "\n")
-        self.binGraphLeft.config(state="disabled")
-        self.binGraphLeft.see("end")
+        self.binGraphRight.config(state="normal")
+        self.binGraphRight.insert("end", newText + "\n")
+        self.binGraphRight.config(state="disabled")
+        self.binGraphRight.see("end")
         return bar
 
 test = GUI()
