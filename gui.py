@@ -1,4 +1,7 @@
 import tkinter as tk
+import time
+import culturalAlgorithm
+import backtrackingAlgorithm
 from tkinter import ttk, messagebox
 
 class GUI:
@@ -46,6 +49,9 @@ class GUI:
         tk.Label(self.inputFrame, text="Max Item Size:").grid(row=0,column=2, padx=10)
         self.entMaxSize = tk.Entry(self.inputFrame, width=10)
         self.entMaxSize.grid(row=0, column=3,padx=10)
+        tk.Label(self.inputFrame, text="Number of Items:").grid(row=0,column=4, padx=10)
+        self.itemNumber = tk.Entry(self.inputFrame, width=10)
+        self.itemNumber.grid(row=0, column=3,padx=10)
 
         # Dropdown menu for algorithms
         self.algoFrame = tk.Frame(self.topFrame)
@@ -67,6 +73,19 @@ class GUI:
             *self.algoOptions,
             command=self.whenAlgoChange)
         self.algoDropdown.pack(pady=5)
+
+        self.runButton = tk.Button(self.topFrame, text="Run", font=("Helvetica", 14), command=self.runAlgorithm)
+        self.runButton.pack(pady=20)
+
+        self.btTimeLabel = tk.Label(self.leftFrame, text="Backtracking time: 0 ms")
+        self.btTimeLabel.pack()
+        self.btBinsLabel = tk.Label(self.leftFrame, text="Backtracking bins: 0")
+        self.btBinsLabel.pack()
+
+        self.caTimeLabel = tk.Label(self.rightFrame, text="Cultural Algorithm time: 0 ms")
+        self.caTimeLabel.pack()
+        self.caBinsLabel = tk.Label(self.rightFrame, text="Cultural Algorithm bins: 0")
+        self.caBinsLabel.pack()
     
     def whenAlgoChange(self, choice):
         # choice is the new value selected from the dropdown
@@ -88,6 +107,55 @@ class GUI:
         self.binGraphLeft.config(state="disabled")
         self.binGraphLeft.see("end")
         return bar
+    
+    def runAlgorithm(self):
+        minSize = int(self.entMinSize.get())
+        maxSize = int(self.entMaxSize.get())
+        numItems = int(self.itemNumber.get())
+        binSize = 10
+        choice =  self.algoDropdown = ttk.OptionMenu.get()
+
+        items = culturalAlgorithm.initializeTotalItems(minSize, maxSize, numItems)
+
+        if choice == "Backtracking":
+            start = time.time()
+            solBT = backtrackingAlgorithm.solveBinPacking(items, binSize)
+            end = time.time()
+            btTime = (end - start) * 1000.0
+
+            test.btTimeLabel.config(text=f"Backtracking time: {btTime:.2f} ms")
+            test.btBinsLabel.config(text=f"Backtracking bins: {len(solBT)}")
+
+        elif choice == "Cultural Algorithm":
+            start = time.time()
+            solCA = culturalAlgorithm.generateBinCulturalAlgorithm(100, 50, 0.2, numItems, binSize)
+            end = time.time()
+            caTime = (end - start) * 1000.0
+
+            test.caTimeLabel.config(text=f"Cultural Algorithm time: {caTime:.2f} ms")
+            test.caBinsLabel.config(text=f"Cultural Algorithm bins: {len(solCA)}")
+
+        else:  
+
+            startBT = time.time()
+            solBT = backtrackingAlgorithm.solveBinPacking(items, binSize)
+            endBT = time.time()
+
+            startCA = time.time()
+            solCA = culturalAlgorithm.generateBinCulturalAlgorithm(100, 50, 0.2, numItems, binSize)
+            endCA = time.time()
+
+            btTime = (endBT - startBT) * 1000.0
+            caTime = (endCA - startCA) * 1000.0
+
+            test.btTimeLabel.config(text=f"Backtracking time: {btTime:.2f} ms")
+            test.btBinsLabel.config(text=f"Backtracking bins: {len(solBT)}")
+
+            test.caTimeLabel.config(text=f"Cultural Algorithm time: {caTime:.2f} ms")
+            test.caBinsLabel.config(text=f"Cultural Algorithm bins: {len(solCA)}")
+
+    
+    
 
 test = GUI()
 
@@ -124,6 +192,7 @@ selectedAlgo = tk.StringVar(test.root)
 selectedAlgo.set("Backtracking Algorithm")  # default
 algoOptions = ["Backtracking Algorithm","Cultural Algorithm","Both"] # List of options
 
+
 # remember last selection
 lastSelection = {"value": selectedAlgo.get()}
 
@@ -148,6 +217,7 @@ test.drawBinFill(0.45, 2)
 test.drawBinFill(1.0, 3)
 
 test.root.mainloop()
+'''
     def drawBinFillRight(self,fillRate, binNumber):
         barlength = 20
         filled = int(fillRate*barlength)
@@ -160,3 +230,4 @@ test.root.mainloop()
         self.binGraphRight.config(state="disabled")
         self.binGraphRight.see("end")
         return bar
+'''
