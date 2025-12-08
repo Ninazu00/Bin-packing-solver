@@ -108,6 +108,21 @@ class GUI:
         self.binGraphLeft.see("end")
         return bar
     
+    def drawBinFillRight(self, bestSolution):
+        for binNumber, binItems in enumerate(bestSolution, start=1):
+            binCapacityUsed = sum(binItems)
+            binCapacityTotal = self.binCapacity 
+            barlength = 20
+            fillRate = binCapacityUsed / binCapacityTotal
+            filled = int(fillRate * barlength)
+            empty = barlength - filled
+            bar = f"Bin {binNumber} : "
+            bar += "|" + ("█"*filled) + ("-"*empty) + "| " + f"{fillRate*100:.1f}%"
+            self.binGraphRight.insert("end", bar + "\n")        
+        self.binGraphRight.config(state="disabled")
+        self.binGraphRight.see("end")
+        return bar
+
     def runAlgorithm(self):
         minSize = int(self.entMinSize.get())
         maxSize = int(self.entMaxSize.get())
@@ -218,15 +233,16 @@ test.drawBinFill(1.0, 3)
 
 test.root.mainloop()
 '''
-    def drawBinFillRight(self,fillRate, binNumber):
-        barlength = 20
-        filled = int(fillRate*barlength)
-        empty = barlength - filled
-        bar = f"Bin {binNumber} : "
-        bar += "|" + ("█"*filled) + ("-"*empty) + "| " + str(fillRate*100) + "%"
-        newText = "\n" + bar
-        self.binGraphRight.config(state="normal")
-        self.binGraphRight.insert("end", newText + "\n")
+    def drawBinFillRight(self,bestSolution):
+        for binNumber, binItems in enumerate(bestSolution, start=1):
+            binCapacityUsed = sum(binItems)
+            binCapacityTotal = self.binCapacity 
+            barlength = 20
+            filled = int(fillRate * barlength)
+            empty = barlength - filled
+            bar = f"Bin {binNumber} : "
+            bar += "|" + ("█"*filled) + ("-"*empty) + "| " + f"{fillRate*100:.1f}%"
+            self.binGraphRight.insert("end", bar + "\n")        
         self.binGraphRight.config(state="disabled")
         self.binGraphRight.see("end")
         return bar
