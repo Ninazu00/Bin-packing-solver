@@ -135,7 +135,7 @@ class GUI:
         sizes = list(items.values())
 
         if choice == "Backtracking Algorithm":
-            bestSolutionBT, execTimeBT = backtrackingAlgorithm.solveBinPacking(items, binSize)
+            bestSolutionBT, execTimeBT = backtrackingAlgorithm.solveBinPacking(sizes, binSize)
 
             self.drawBinFillLeft(bestSolutionBT)
             self.btTimeLabel.config(text=f"Backtracking time: {execTimeBT:.2f} ms")
