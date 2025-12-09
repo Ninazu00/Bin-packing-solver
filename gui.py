@@ -55,8 +55,6 @@ class GUI:
         tk.Label(self.inputFrame, text="Bin Capacity:").grid(row=0, column=6, padx=10)
         self.binCapacity = tk.Entry(self.inputFrame, width=10)
         self.binCapacity.grid(row=0, column=7, padx=10)
-
-
         # Dropdown menu for algorithms
         self.algoFrame = tk.Frame(self.topFrame)
         self.algoFrame.pack(pady=10)
@@ -133,15 +131,16 @@ class GUI:
         numItems = int(self.itemNumber.get())
         binSize = int(self.binCapacity.get())
         choice =  self.selectedAlgo.get()
-
         items = culturalAlgorithm.initializeTotalItems(minSize, maxSize, numItems)
         itemsCA = items.copy()
-        if choice == "Backtracking":
+        sizes = list(items.values())
+        if choice == "Backtracking Algorithm":
             start = time.time()
-            solBT = backtrackingAlgorithm.solveBinPacking(items, binSize)
+            solBT = backtrackingAlgorithm.solveBinPacking(sizes, binSize)
             end = time.time()
             btTime = (end - start) * 1000.0
-
+            print(solBT)
+            self.drawBinFillLeft(solBT)
             self.btTimeLabel.config(text=f"Backtracking time: {btTime:.2f} ms")
             self.btBinsLabel.config(text=f"Backtracking bins: {len(solBT)}")
 
@@ -166,18 +165,10 @@ class GUI:
             solBT = backtrackingAlgorithm.solveBinPacking(items, binSize)
             endBT = time.time()
 
-            startCA = time.time()
-            solCA = culturalAlgorithm.generateBinCulturalAlgorithm(100, 50, 0.2, numItems, binSize)
-            endCA = time.time()
-
             btTime = (endBT - startBT) * 1000.0
-            caTime = (endCA - startCA) * 1000.0
 
             self.btTimeLabel.config(text=f"Backtracking time: {btTime:.2f} ms")
             self.btBinsLabel.config(text=f"Backtracking bins: {len(solBT)}")
-
-            self.caTimeLabel.config(text=f"Cultural Algorithm time: {caTime:.2f} ms")
-            self.caBinsLabel.config(text=f"Cultural Algorithm bins: {len(solCA)}")
 
             #Cultural Algorithm Run
             #Fine tuning variables for the cultural algorithm

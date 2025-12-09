@@ -143,13 +143,6 @@ def backtrack(currentIndex, usedBins, binRemainingCapacities, binCapacity, bestS
 
 
 def solveBinPacking(items, binCapacity):
-    if binCapacity <= 0:
-        raise ValueError("binCapacity must be positive.")
-    if any(item <= 0 for item in items):
-        raise ValueError("All items must have positive size.")
-    if any(item > binCapacity for item in items):
-        raise ValueError("Item size cannot exceed binCapacity.")
-    
     sortedItems = sortItems(items)
     bestSolution = initializeSolution(sortedItems, binCapacity)
     usedBins = []

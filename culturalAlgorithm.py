@@ -182,5 +182,5 @@ def culturalAlgorithmFullSolve(populationSize,mutationRate,maxGenerations,totalI
         GUI.drawBinFillRight(bestBin.getFillRate(binSize),binAmount)
         print("Items in bin:", bestBin.items.values())
         print("Fill rate:", bestBin.getFillRate(binSize))
-        print("Total number of bins used: ", binAmount)
+        print("Total number of bins used when running cultural: ", binAmount)
     return binAmount
