@@ -140,7 +140,7 @@ class GUI:
             self.drawBinFillLeft(bestSolutionBT)
             elapsedTimeBT = time.time()- startTimeBT
             print("Time elapsed for Backtracking: ", elapsedTimeBT)
-            self.btTimeLabel.config(text=f"Backtracking time: {execTimeBT:.2f} ms")
+            self.btTimeLabel.config(text=f"Backtracking time: {execTimeBT:.2f} S")
             self.btBinsLabel.config(text=f"Backtracking bins: {len(bestSolutionBT)}")
 
         elif choice == "Cultural Algorithm":
@@ -157,14 +157,14 @@ class GUI:
             #Calculates the time it took the cultural algorithm to run
             elapsedTimeCA = time.time()- startTimeCA
             print("Time elapsed: ", elapsedTimeCA) 
-            self.caTimeLabel.config(text=f"Cultural Algorithm time: {elapsedTimeCA:.2f} ms")
+            self.caTimeLabel.config(text=f"Cultural Algorithm time: {elapsedTimeCA:.2f} S")
             self.caBinsLabel.config(text=f"Cultural Algorithm bins: {binAmountCA}")
         else:  
             bestSolutionBT, execTimeBT = backtrackingAlgorithm.solveBinPacking(sizes, binSize)
             startTimeBT = time.time()
             self.drawBinFillLeft(bestSolutionBT)
             elapsedTimeBT = time.time()- startTimeBT
-            self.btTimeLabel.config(text=f"Backtracking time: {elapsedTimeBT:.2f} ms")
+            self.btTimeLabel.config(text=f"Backtracking time: {elapsedTimeBT:.2f} S")
             self.btBinsLabel.config(text=f"Backtracking bins: {len(bestSolutionBT)}")
             #Cultural Algorithm Run
             #Fine tuning variables for the cultural algorithm
@@ -181,5 +181,5 @@ class GUI:
             elapsedTimeCA = time.time()- startTimeCA
             print("Time elapsed for Cultural: ", elapsedTimeCA) 
             print("Time elapsed for Backtracking: ", elapsedTimeBT)
-            self.caTimeLabel.config(text=f"Cultural Algorithm time: {elapsedTimeCA:.2f} ms")
+            self.caTimeLabel.config(text=f"Cultural Algorithm time: {elapsedTimeCA:.2f} S")
             self.caBinsLabel.config(text=f"Cultural Algorithm bins: {binAmountCA}")
